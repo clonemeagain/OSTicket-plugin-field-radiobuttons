@@ -217,7 +217,7 @@ class RadioField extends FormField {
 }
 
 class RadioWidget extends Widget {
-    
+
     function render($options=array()) {
 
         $config = $this->field->getConfiguration();
@@ -246,7 +246,7 @@ class RadioWidget extends Widget {
 
         if (isset($config['classes']))
             $classes = 'class="'.$config['classes'].'"';
-        
+
         $this->emitChoices($choices, $values, $have_def, $def_key);
     }
 
@@ -308,5 +308,23 @@ class RadiobuttonsPlugin extends Plugin {
     function bootstrap() {
         $config = $this->getConfig();
         FormField::$types[$config->get('category')]['radiobutton'] = array(   /* @trans */ 'Radiobuttons', 'RadioField');
+    }
+
+
+    /**
+     * Checks for uses of the field and warns the admin about the removal of the plugin.
+     *
+     * {@inheritdoc}
+     *
+     * @see Plugin::uninstall()
+     */
+    function uninstall() {
+      $errors = array();
+      global $ost;
+      $ost->alertAdmin('Plugin: Radiobuttons Field has been uninstalled',
+        "If this field type has been added to any Forms, you will have errors!.",
+        true);
+
+      parent::uninstall($errors);
     }
 }
